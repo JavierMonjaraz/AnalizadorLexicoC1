@@ -32,7 +32,7 @@
          </font>
       </Text>
       <TextArea fx:id="TA_consultas" layoutX="202.0" layoutY="110.0" prefHeight="289.0" prefWidth="449.0" />
-      <Button fx:id="execute_btn" alignment="BOTTOM_LEFT" layoutX="202.0" layoutY="428.0" mnemonicParsing="false" onAction="#onExecute" prefHeight="35.0" prefWidth="166.0" style="-fx-background-color: #379b37;" text="Ejecutar Query" textFill="WHITE">
+      <Button fx:id="execute_btn" alignment="BOTTOM_LEFT" layoutX="202.0" layoutY="428.0" mnemonicParsing="false" onMouseClicked="#executeOnMouseClicked" prefHeight="35.0" prefWidth="166.0" style="-fx-background-color: #379b37;" text="Ejecutar Query" textFill="WHITE">
          <font>
             <Font name="Roboto Bold" size="18.0" />
          </font>

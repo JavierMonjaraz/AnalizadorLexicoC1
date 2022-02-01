@@ -1,27 +1,21 @@
 package com.example.proyecto.Controller;
 
 import com.example.proyecto.Model.Token;
-import javafx.event.ActionEvent;
 import javafx.scene.control.TextArea;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.input.MouseEvent;
 
 import java.util.ArrayList;
 
-
 public class MainViewController {
 
-    ArrayList<String> PC = new ArrayList<>();
-    ArrayList<String> TD = new ArrayList<>();
-    ArrayList<String> N = new ArrayList<>();
-    ArrayList<String> S = new ArrayList<>();
-    ArrayList<String> L = new ArrayList<>();
+    ArrayList<Token> tokens = new ArrayList<>();
+    Token identificador;
+    Token longitud;
+    Token palabrasReservadas;
+    Token tiposDato;
 
-    Token lista1;
-    Token lista2;
-    Token lista3;
-    Token lista4;
-    Token lista5;
 
     @FXML
     private TextArea TA_consultas;
@@ -35,129 +29,95 @@ public class MainViewController {
     }
 
     @FXML
-    public void onExecute(ActionEvent actionEvent) {
+    void executeOnMouseClicked(MouseEvent event) {
         busqueda();
     }
 
-    public void busqueda(){
-        String input = TA_consultas.getText();
-        if (lista1.isin(input)==false){
-            if (lista2.isin(input)==false){
-                if (lista3.isin(input)==false){
-                    if (lista4.isin(input)==false){
-                        if (lista5.isin(input)==false){
-                            System.out.println("ÉL simbolo no se encuentra en ningun Token");
-                        }
-                    }
+    public void busqueda() {
+        String input = TA_consultas.getText().replaceAll("\n", "").replaceAll("\\(", " ( ").replaceAll("\\)", " )").replaceAll(";", "  ; ").replaceAll(",", " ,").replaceAll("\t", " ").replaceAll("  ", " ");
+        String[] dataInput = input.split(" ");
+
+        ArrayList<String> simbolosNoValidos = new ArrayList<>();
+        for (String data : dataInput) {
+            boolean simboloValido = false;
+            for (Token token : tokens) {
+                if ((!(token.getNombre().equals("Identificador")) && token.isin(data)) || (token.getNombre().equals("Identificador") && token.isin(data) && !(palabrasReservadas.isin(data)) && !(tiposDato.isin(data)))) {
+                    System.out.println(token + "-> " + data);
+                    simboloValido = true;
                 }
+            }
+
+            if (!simboloValido) {
+                simbolosNoValidos.add(data);
             }
         }
 
+        if (!simbolosNoValidos.isEmpty()) {
+            System.out.println("Simbolos no validos " + simbolosNoValidos.size());
+            for (String simbolo : simbolosNoValidos) {
+                System.out.println(simbolo);
+            }
+        }
     }
 
 
     public void setTokens() {
+        ArrayList<String> simbolosPalabrasReservadas = new ArrayList<>();
+        ArrayList<String> simbolosTiposDato = new ArrayList<>();
+        ArrayList<String> parentesisApertura = new ArrayList<>();
+        ArrayList<String> parentesisCierre = new ArrayList<>();
+        ArrayList<String> coma = new ArrayList<>();
+        ArrayList<String> puntoComa = new ArrayList<>();
 
-        PC.add("create");
-        PC.add("database");
-        PC.add("table");
-        PC.add("null");
-        PC.add("not null");
-        PC.add("primary");
-        PC.add("key");
-        PC.add("auto_increment");
+        simbolosPalabrasReservadas.add("create");
+        simbolosPalabrasReservadas.add("database");
+        simbolosPalabrasReservadas.add("table");
+        simbolosPalabrasReservadas.add("null");
+        simbolosPalabrasReservadas.add("not");
+        simbolosPalabrasReservadas.add("primary");
+        simbolosPalabrasReservadas.add("key");
+        simbolosPalabrasReservadas.add("auto_increment");
 
-        TD.add("decimal");
-        TD.add("double");
-        TD.add("date");
-        TD.add("datetime");
-        TD.add("float");
-        TD.add("real");
-        TD.add("int");
-        TD.add("tinyint");
-        TD.add("smallint");
-        TD.add("mediumint");
-        TD.add("char");
-        TD.add("nchar");
-        TD.add("varchar");
-        TD.add("text");
-        TD.add("tinytext");
-        TD.add("mediumtext");
-        TD.add("longtext");
-        TD.add("year");
-        TD.add("time");
-        TD.add("timestamp");
+        simbolosTiposDato.add("decimal");
+        simbolosTiposDato.add("double");
+        simbolosTiposDato.add("date");
+        simbolosTiposDato.add("datetime");
+        simbolosTiposDato.add("float");
+        simbolosTiposDato.add("real");
+        simbolosTiposDato.add("int");
+        simbolosTiposDato.add("tinyint");
+        simbolosTiposDato.add("smallint");
+        simbolosTiposDato.add("mediumint");
+        simbolosTiposDato.add("char");
+        simbolosTiposDato.add("nchar");
+        simbolosTiposDato.add("varchar");
+        simbolosTiposDato.add("text");
+        simbolosTiposDato.add("tinytext");
+        simbolosTiposDato.add("mediumtext");
+        simbolosTiposDato.add("longtext");
+        simbolosTiposDato.add("year");
+        simbolosTiposDato.add("time");
+        simbolosTiposDato.add("timestamp");
 
-        N.add("0");
-        N.add("1");
-        N.add("2");
-        N.add("3");
-        N.add("4");
-        N.add("5");
-        N.add("6");
-        N.add("7");
-        N.add("8");
-        N.add("9");
+        coma.add(",");
+        parentesisApertura.add("(");
+        parentesisCierre.add(")");
+        puntoComa.add(";");
 
-        S.add(",");
-        S.add("(");
-        S.add(")");
-        S.add(";");
+//        Creación de tokens
+        tokens.add(new Token("Punto y Coma", puntoComa));
+        tokens.add(new Token("Coma", coma));
+        tokens.add(new Token("Parentesis apertura", parentesisApertura));
+        tokens.add(new Token("Parentesis cierre", parentesisCierre));
 
-        L.add("a");
-        L.add("b");
-        L.add("c");
-        L.add("d");
-        L.add("e");
-        L.add("f");
-        L.add("g");
-        L.add("h");
-        L.add("i");
-        L.add("j");
-        L.add("k");
-        L.add("l");
-        L.add("m");
-        L.add("n");
-        L.add("r");
-        L.add("s");
-        L.add("o");
-        L.add("p");
-        L.add("q");
-        L.add("w");
-        L.add("x");
-        L.add("y");
-        L.add("z");
-        L.add("A");
-        L.add("B");
-        L.add("C");
-        L.add("D");
-        L.add("E");
-        L.add("F");
-        L.add("G");
-        L.add("H");
-        L.add("I");
-        L.add("J");
-        L.add("K");
-        L.add("L");
-        L.add("M");
-        L.add("N");
-        L.add("R");
-        L.add("S");
-        L.add("O");
-        L.add("P");
-        L.add("Q");
-        L.add("W");
-        L.add("X");
-        L.add("Y");
-        L.add("Z");
+        identificador = new Token("Identificador", "[a-zA-Z]+(_[a-zA-Z]+)*");
+        longitud = new Token("Lonigtud", "(1|2|3|4|5|6|7|8|9)|((1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9))|((1|2)((0|1|2|3|4|5))((0|1|2|3|4|5)))");
+        palabrasReservadas = new Token("Palabras Reservadas", simbolosPalabrasReservadas);
+        tiposDato = new Token("Tipos de Dato", simbolosTiposDato);
 
-        lista1 = new Token("Palabras Clave", PC);
-        lista2 = new Token("Tipos de Dato", TD);
-        lista3 = new Token("Numeros", N);
-        lista4 = new Token("Simbolos", S);
-        lista5 = new Token("Letras", L);
-
+        tokens.add(longitud);
+        tokens.add(identificador);
+        tokens.add(palabrasReservadas);
+        tokens.add(tiposDato);
     }
-
-
 }
