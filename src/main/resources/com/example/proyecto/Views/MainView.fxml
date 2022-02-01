@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="700.0" style="-fx-background-color: #112349;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto.Controller.MainViewController">
+   <children>
+      <AnchorPane layoutX="-7.0" layoutY="-8.0" prefHeight="559.0" prefWidth="157.0" style="-fx-background-color: #2c2ab8;">
+         <children>
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#82a0bc" height="100.0" layoutX="7.0" layoutY="61.0" opacity="0.84" stroke="#2c2ab8" strokeType="INSIDE" width="156.0" />
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="42.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../assets/mysql.png" />
+               </image>
+            </ImageView>
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="42.0" layoutY="475.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../assets/cancel.png" />
+               </image>
+            </ImageView>
+         </children>
+      </AnchorPane>
+      <Text fill="WHITE" layoutX="202.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analizador de sentencias CREATE MySQL" wrappingWidth="449.13671875">
+         <font>
+            <Font name="Roboto" size="24.0" />
+         </font>
+      </Text>
+      <TextArea fx:id="TA_consultas" layoutX="202.0" layoutY="110.0" prefHeight="289.0" prefWidth="449.0" />
+      <Button fx:id="execute_btn" alignment="BOTTOM_LEFT" layoutX="202.0" layoutY="428.0" mnemonicParsing="false" onAction="#onExecute" prefHeight="35.0" prefWidth="166.0" style="-fx-background-color: #379b37;" text="Ejecutar Query" textFill="WHITE">
+         <font>
+            <Font name="Roboto Bold" size="18.0" />
+         </font>
+      </Button>
+      <ImageView fitHeight="15.0" fitWidth="15.0" layoutX="342.0" layoutY="440.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../../assets/next.png" />
+         </image>
+      </ImageView>
+   </children>
+</AnchorPane>
