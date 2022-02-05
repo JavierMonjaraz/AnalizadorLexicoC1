@@ -4,6 +4,7 @@ module com.example.proyecto {
 
     requires org.controlsfx.controls;
 
+    opens assets;
     opens com.example.proyecto to javafx.fxml;
     exports com.example.proyecto;
     exports com.example.proyecto.Controller;

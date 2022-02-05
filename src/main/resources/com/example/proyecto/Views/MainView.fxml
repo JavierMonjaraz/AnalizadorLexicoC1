@@ -19,14 +19,14 @@
                   <Image url="@../../../../assets/mysql.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="42.0" layoutY="475.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="42.0" layoutY="475.0" onMouseClicked="#salirOnMouseClicked" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../assets/cancel.png" />
                </image>
             </ImageView>
          </children>
       </AnchorPane>
-      <Text fill="WHITE" layoutX="202.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analizador de sentencias CREATE MySQL" wrappingWidth="449.13671875">
+      <Text fill="WHITE" layoutX="174.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Analizador léxico de sentencias CREATE MySQL" wrappingWidth="505.13671875">
          <font>
             <Font name="Roboto" size="24.0" />
          </font>

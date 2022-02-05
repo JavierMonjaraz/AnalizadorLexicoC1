@@ -60,6 +60,11 @@ public class MainViewController {
         }
     }
 
+    @FXML
+    void salirOnMouseClicked(MouseEvent event) {
+        System.exit(1);
+    }
+
 
     public void setTokens() {
         ArrayList<String> simbolosPalabrasReservadas = new ArrayList<>();
