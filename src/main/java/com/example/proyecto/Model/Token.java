@@ -21,9 +21,17 @@ public class Token {
         this.simbolos = new ArrayList<>();
     }
 
+    public Token(String nombre) {
+        this.nombre = nombre;
+        this.regex="";
+        this.simbolos = new ArrayList<>();
+    }
+
     public void addSimbolo(String item) {
         this.simbolos.add(item);
     }
+
+
 
     public ArrayList<String> getSimbolos() {
         return simbolos;
