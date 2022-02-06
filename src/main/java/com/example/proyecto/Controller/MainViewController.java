@@ -1,6 +1,5 @@
 package com.example.proyecto.Controller;
 
-import com.example.proyecto.Main;
 import com.example.proyecto.Model.Token;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -181,9 +180,9 @@ public class MainViewController {
     public void openTokensView() throws IOException {
         try {
             FXMLLoader fxmlLoader2 = new FXMLLoader();
-            fxmlLoader2.setLocation(MainViewController.class.getResource("/com/example/proyecto/Views/hello-view.fxml"));
+            fxmlLoader2.setLocation(MainViewController.class.getResource("/com/example/proyecto/Views/resumen.fxml"));
             Parent root = fxmlLoader2.load();
-            HelloController controlador = fxmlLoader2.getController();
+            ResumenController controlador = fxmlLoader2.getController();
 
             controlador.initialize(tokensEncontrados,simbolosNoValidos);
             Scene scene = new Scene(root);
