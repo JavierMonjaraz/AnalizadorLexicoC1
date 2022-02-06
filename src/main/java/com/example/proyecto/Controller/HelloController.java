@@ -1,37 +1,54 @@
 package com.example.proyecto.Controller;
 
-import com.example.proyecto.Model.Simbolo;
+import com.example.proyecto.Model.Token;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class HelloController {
-    @FXML
-    private Label welcomeText;
 
     @FXML
-    protected void onHelloButtonClick() {
-        welcomeText.setText("XD");
-    }
+    private TreeView<String> tokens;
 
-    void CargarGramatica(){
-        Simbolo simboloInicial = new Simbolo("Query",true,true);
-        Simbolo simboloNoTerminal1 = new Simbolo("CDB",false,false);
-        Simbolo simboloNoTerminal2 = new Simbolo("C",false,false);
-        Simbolo simboloNoTerminal3 = new Simbolo("BD",false,false);
-        Simbolo simboloNoTerminal4 = new Simbolo("ID",false,false);
-        Simbolo simboloNoTerminal5 = new Simbolo("RESTOID",false,false);
-        Simbolo simboloNoTerminal6 = new Simbolo("L",false,false);
-        Simbolo simboloNoTerminal7 = new Simbolo("CTB",false,false);
-        Simbolo simboloNoTerminal8 = new Simbolo("RCTB",false,false);
-        Simbolo simboloNoTerminal9 = new Simbolo("TB",false,false);
-        Simbolo simboloNoTerminal10 = new Simbolo("ATRIBUTOS",false,false);
-        Simbolo simboloNoTerminal11 = new Simbolo("RATRIBUTOS",false,false);
-        Simbolo simboloNoTerminal12 = new Simbolo("ATRIBUTO",false,false);
-        Simbolo simboloNoTerminal13 = new Simbolo("AUTOI",false,false);
-        Simbolo simboloNoTerminal14 = new Simbolo("NULL",false,false);
-        Simbolo simboloNoTerminal15 = new Simbolo("TIPODATO",false,false);
-        Simbolo simboloNoTerminal16 = new Simbolo("NUMERICO",false,false);
-        Simbolo simboloNoTerminal17 = new Simbolo("STRING",false,false);
-        Simbolo simboloNoTerminal18 = new Simbolo("FECHA",false,false);
+    public void initialize(ArrayList<Token> tokensEncontrados, ArrayList<String> simbolosNoValidos) {
+        TreeItem rootItem = new TreeItem("Resumen");
+
+        if (!tokensEncontrados.isEmpty()) {
+            TreeItem encontrados = new TreeItem("Tokens encontrados: " + tokensEncontrados.size());
+            for (Token token : tokensEncontrados) {
+                TreeItem tokenItem = new TreeItem(token + ": " + token.getSimbolos().size());
+                Map<String, Integer> ocurrencias = new HashMap<>();
+
+                for (String simbolo : token.getSimbolos()) {
+                    ocurrencias.merge(simbolo, 1, Integer::sum);
+                }
+
+                ocurrencias.forEach((simbolo, ocurrencia) -> tokenItem.getChildren().add(new TreeItem(simbolo + ": " + ocurrencia)));
+                encontrados.getChildren().add(tokenItem);
+            }
+            rootItem.getChildren().add(encontrados);
+        }
+
+        if (!simbolosNoValidos.isEmpty()) {
+            TreeItem simbolos = new TreeItem("Símbolos No validos");
+
+            Map<String, Integer> ocurrencias = new HashMap<>();
+
+            for (String simbolo : simbolosNoValidos) {
+                ocurrencias.merge(simbolo, 1, Integer::sum);
+            }
+
+            ocurrencias.forEach((simbolo, ocurrencia) -> simbolos.getChildren().add(new TreeItem(simbolo + ": " + ocurrencia)));
+
+            rootItem.getChildren().add(simbolos);
+        }
+
+        tokens.setRoot(rootItem);
+        tokens.setShowRoot(false);
     }
 }

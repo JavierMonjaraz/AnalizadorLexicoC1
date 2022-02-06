@@ -1,14 +1,21 @@
 package com.example.proyecto.Controller;
 
+import com.example.proyecto.Main;
 import com.example.proyecto.Model.Token;
-import javafx.event.ActionEvent;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.*;
 
 public class MainViewController {
@@ -31,6 +38,9 @@ public class MainViewController {
     private Label mensaje;
 
     @FXML
+    private Button ver_btn;
+
+    @FXML
     public void initialize() {
         setTokens();
     }
@@ -38,12 +48,12 @@ public class MainViewController {
     @FXML
     void executeOnMouseClicked(MouseEvent event) {
         busqueda();
-        setMensaje();
     }
 
     public void busqueda() {
         simbolosNoValidos.clear();
         tokensEncontrados.clear();
+        ver_btn.setVisible(false);
         String input = TA_consultas.getText().replaceAll("\n", "").replaceAll("\\(", " ( ").replaceAll("\\)", " )").replaceAll(";", "  ; ").replaceAll(",", " ,").replaceAll("\t", " ").replaceAll("  ", " ");
         String[] dataInput = input.split(" ");
 
@@ -60,6 +70,7 @@ public class MainViewController {
                 simbolosNoValidos.add(simbolo);
             }
         }
+        setMensaje();
     }
 
     void agregarSimboloEncontrado(Token token, String simbolo) {
@@ -96,18 +107,8 @@ public class MainViewController {
         } else {
             mensaje.setTextFill(Color.web("white"));
             mensaje.setText("Todos los símbolos introducidos han sido aceptados");
-            for (Token token : tokensEncontrados) {
-                System.out.println("-----------------------------");
-                System.out.println("token: " + token + " | ocurrencias: " + token.getSimbolos().size());
-                Map<String, Integer> ocurrencias = new HashMap<>();
-
-                for (String simbolo : token.getSimbolos()) {
-                    ocurrencias.merge(simbolo, 1, Integer::sum);
-                }
-
-                ocurrencias.forEach((simbolo, ocurrencia) -> System.out.println(simbolo + " : " + ocurrencia));
-            }
         }
+        ver_btn.setVisible(true);
     }
 
     @FXML
@@ -177,7 +178,26 @@ public class MainViewController {
     }
 
     @FXML
-    public void openTokensView(ActionEvent actionEvent) {
-        System.out.println("GG");
+    public void openTokensView() throws IOException {
+        try {
+            FXMLLoader fxmlLoader2 = new FXMLLoader();
+            fxmlLoader2.setLocation(MainViewController.class.getResource("/com/example/proyecto/Views/hello-view.fxml"));
+            Parent root = fxmlLoader2.load();
+            HelloController controlador = fxmlLoader2.getController();
+
+            controlador.initialize(tokensEncontrados,simbolosNoValidos);
+            Scene scene = new Scene(root);
+            Stage stage = new Stage();
+            stage.setScene(scene);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.getIcons().add(new Image("assets/mysqllogo.jpg"));
+            stage.setTitle("Detalles");
+            stage.setResizable(false);
+            stage.showAndWait();
+            ver_btn.setVisible(false);
+            mensaje.setText("");
+        } catch (IOException ex) {
+            System.out.println("IO Exception: " + ex.getMessage());
+        }
     }
 }

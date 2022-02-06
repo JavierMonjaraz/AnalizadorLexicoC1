@@ -14,9 +14,6 @@ import java.io.IOException;
 public class Main extends Application {
     private static Scene scene;
     private static Stage primaryStage;
-    public static Stage secondStage;
-    private static FXMLLoader fxmlloader;
-    private static Scene secondScene;
     @Override
     public void start(Stage stage) throws IOException {
         this.primaryStage=stage;
@@ -44,27 +41,6 @@ public class Main extends Application {
         return fxmlloader.load();
     }
 
-    public static void newStage(String fxml, String title) {
-        try {
-            Parent node = loadFXML(fxml);
-            secondStage= new Stage();
-            secondScene = new Scene(node);
-            secondStage.setScene(secondScene);
-            secondStage.setTitle(title);
-            secondStage.initOwner(primaryStage);
-            secondStage.initModality(Modality.WINDOW_MODAL);
-            secondStage.initStyle(StageStyle.UNDECORATED);
-            secondStage.centerOnScreen();
-            secondStage.showAndWait();
-        } catch (Exception e) {
-            // TODO: handle exception
-            e.printStackTrace();
-        }
-    }
-
-    public static FXMLLoader getFxmlloader() {
-        return fxmlloader;
-    }
 
     public static void main(String[] args) {
         launch();
