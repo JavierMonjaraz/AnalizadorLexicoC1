@@ -1,6 +1,7 @@
 package com.example.proyecto.Controller;
 
 import com.example.proyecto.Model.Token;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.fxml.FXML;
@@ -173,5 +174,10 @@ public class MainViewController {
         tokens.add(identificador);
         tokens.add(palabrasReservadas);
         tokens.add(tiposDato);
+    }
+
+    @FXML
+    public void openTokensView(ActionEvent actionEvent) {
+        System.out.println("GG");
     }
 }
