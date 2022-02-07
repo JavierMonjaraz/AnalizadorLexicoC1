@@ -99,10 +99,6 @@ public class MainViewController {
             } else {
                 mensaje.setText("Se han encontrado " + cantidadSimbolos + " símbolos no válidos");
             }
-
-            for (String simbolo : simbolosNoValidos) {
-                System.out.println(simbolo);
-            }
         } else {
             mensaje.setTextFill(Color.web("white"));
             mensaje.setText("Todos los símbolos introducidos han sido aceptados");
@@ -132,6 +128,15 @@ public class MainViewController {
         simbolosPalabrasReservadas.add("primary");
         simbolosPalabrasReservadas.add("key");
         simbolosPalabrasReservadas.add("auto_increment");
+
+        simbolosPalabrasReservadas.add("CREATE");
+        simbolosPalabrasReservadas.add("DATABASE");
+        simbolosPalabrasReservadas.add("TABLE");
+        simbolosPalabrasReservadas.add("NULL");
+        simbolosPalabrasReservadas.add("NOT");
+        simbolosPalabrasReservadas.add("PRIMARY");
+        simbolosPalabrasReservadas.add("KEY");
+        simbolosPalabrasReservadas.add("AUTO_INCREMENT");
 
         simbolosTiposDato.add("decimal");
         simbolosTiposDato.add("double");
@@ -166,7 +171,7 @@ public class MainViewController {
         tokens.add(new Token("Parentesis cierre", parentesisCierre));
 
         identificador = new Token("Identificador", "[a-zA-Z]+(_[a-zA-Z]+)*");
-        longitud = new Token("Lonigtud", "(1|2|3|4|5|6|7|8|9)|((1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9))|((1|2)((0|1|2|3|4|5))((0|1|2|3|4|5)))");
+        longitud = new Token("Longitud", "(1|2|3|4|5|6|7|8|9)|((1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9))|((1|2)((0|1|2|3|4|5))((0|1|2|3|4|5)))");
         palabrasReservadas = new Token("Palabras Reservadas", simbolosPalabrasReservadas);
         tiposDato = new Token("Tipos de Dato", simbolosTiposDato);
 

@@ -2,7 +2,6 @@ package com.example.proyecto.Controller;
 
 import com.example.proyecto.Model.Token;
 import javafx.fxml.FXML;
-import javafx.scene.control.Label;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 
@@ -35,7 +34,7 @@ public class ResumenController {
         }
 
         if (!simbolosNoValidos.isEmpty()) {
-            TreeItem simbolos = new TreeItem("Símbolos No validos");
+            TreeItem simbolos = new TreeItem("Símbolos No validos: "+simbolosNoValidos.size());
 
             Map<String, Integer> ocurrencias = new HashMap<>();
 
