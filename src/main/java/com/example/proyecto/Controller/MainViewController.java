@@ -1,5 +1,6 @@
 package com.example.proyecto.Controller;
 
+import com.example.proyecto.Model.AnalizadorLexico;
 import com.example.proyecto.Model.Token;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -19,14 +20,6 @@ import java.util.*;
 
 public class MainViewController {
 
-    private ArrayList<Token> tokens = new ArrayList<>();
-    private Token identificador;
-    private Token longitud;
-    private Token palabrasReservadas;
-    private Token tiposDato;
-    private ArrayList<String> simbolosNoValidos = new ArrayList<>();
-    private ArrayList<Token> tokensEncontrados = new ArrayList<>();
-
     @FXML
     private TextArea TA_consultas;
 
@@ -39,146 +32,22 @@ public class MainViewController {
     @FXML
     private Button ver_btn;
 
+    private AnalizadorLexico analizadorLexico;
     @FXML
     public void initialize() {
-        setTokens();
+        analizadorLexico = new AnalizadorLexico();
     }
 
     @FXML
     void executeOnMouseClicked(MouseEvent event) {
-        busqueda();
+        analizadorLexico.busqueda(TA_consultas,ver_btn);
+        analizadorLexico.showMensaje(mensaje,ver_btn);
     }
 
-    public void busqueda() {
-        simbolosNoValidos.clear();
-        tokensEncontrados.clear();
-        ver_btn.setVisible(false);
-        String input = TA_consultas.getText().replaceAll("\n", "").replaceAll("\\(", " ( ").replaceAll("\\)", " )").replaceAll(";", "  ; ").replaceAll(",", " ,").replaceAll("\t", " ").replaceAll("  ", " ");
-        String[] dataInput = input.split(" ");
-
-        for (String simbolo : dataInput) {
-            boolean simboloValido = false;
-            for (Token token : tokens) {
-                if ((!(token.getNombre().equals("Identificador")) && token.isin(simbolo)) || (token.getNombre().equals("Identificador") && token.isin(simbolo) && !(palabrasReservadas.isin(simbolo)) && !(tiposDato.isin(simbolo)))) {
-                    agregarSimboloEncontrado(token, simbolo);
-                    simboloValido = true;
-                }
-            }
-
-            if (!simboloValido) {
-                simbolosNoValidos.add(simbolo);
-            }
-        }
-        setMensaje();
-    }
-
-    void agregarSimboloEncontrado(Token token, String simbolo) {
-        boolean crearToken = true;
-        for (Token tokenEncontrado : tokensEncontrados) {
-            if (tokenEncontrado.getNombre() == token.getNombre()) {
-                tokenEncontrado.addSimbolo(simbolo);
-                crearToken = false;
-            }
-        }
-
-        if (crearToken || tokensEncontrados.isEmpty()) {
-            Token nuevoToken = new Token(token.getNombre());
-            nuevoToken.addSimbolo(simbolo);
-            tokensEncontrados.add(nuevoToken);
-        }
-    }
-
-    void setMensaje() {
-        mensaje.setText("");
-
-        if (!simbolosNoValidos.isEmpty()) {
-            mensaje.setTextFill(Color.web("FF8B00"));
-            int cantidadSimbolos = simbolosNoValidos.size();
-            if (cantidadSimbolos == 1) {
-                mensaje.setText("Se ha encontrado " + cantidadSimbolos + " Símbolo no válido");
-            } else {
-                mensaje.setText("Se han encontrado " + cantidadSimbolos + " símbolos no válidos");
-            }
-        } else {
-            mensaje.setTextFill(Color.web("white"));
-            mensaje.setText("Todos los símbolos introducidos han sido aceptados");
-        }
-        ver_btn.setVisible(true);
-    }
 
     @FXML
     void salirOnMouseClicked(MouseEvent event) {
         System.exit(1);
-    }
-
-
-    public void setTokens() {
-        ArrayList<String> simbolosPalabrasReservadas = new ArrayList<>();
-        ArrayList<String> simbolosTiposDato = new ArrayList<>();
-        ArrayList<String> parentesisApertura = new ArrayList<>();
-        ArrayList<String> parentesisCierre = new ArrayList<>();
-        ArrayList<String> coma = new ArrayList<>();
-        ArrayList<String> puntoComa = new ArrayList<>();
-
-        simbolosPalabrasReservadas.add("create");
-        simbolosPalabrasReservadas.add("database");
-        simbolosPalabrasReservadas.add("table");
-        simbolosPalabrasReservadas.add("null");
-        simbolosPalabrasReservadas.add("not");
-        simbolosPalabrasReservadas.add("primary");
-        simbolosPalabrasReservadas.add("key");
-        simbolosPalabrasReservadas.add("auto_increment");
-
-        simbolosPalabrasReservadas.add("CREATE");
-        simbolosPalabrasReservadas.add("DATABASE");
-        simbolosPalabrasReservadas.add("TABLE");
-        simbolosPalabrasReservadas.add("NULL");
-        simbolosPalabrasReservadas.add("NOT");
-        simbolosPalabrasReservadas.add("PRIMARY");
-        simbolosPalabrasReservadas.add("KEY");
-        simbolosPalabrasReservadas.add("AUTO_INCREMENT");
-
-        simbolosTiposDato.add("decimal");
-        simbolosTiposDato.add("double");
-        simbolosTiposDato.add("date");
-        simbolosTiposDato.add("datetime");
-        simbolosTiposDato.add("float");
-        simbolosTiposDato.add("real");
-        simbolosTiposDato.add("int");
-        simbolosTiposDato.add("tinyint");
-        simbolosTiposDato.add("smallint");
-        simbolosTiposDato.add("mediumint");
-        simbolosTiposDato.add("char");
-        simbolosTiposDato.add("nchar");
-        simbolosTiposDato.add("varchar");
-        simbolosTiposDato.add("text");
-        simbolosTiposDato.add("tinytext");
-        simbolosTiposDato.add("mediumtext");
-        simbolosTiposDato.add("longtext");
-        simbolosTiposDato.add("year");
-        simbolosTiposDato.add("time");
-        simbolosTiposDato.add("timestamp");
-
-        coma.add(",");
-        parentesisApertura.add("(");
-        parentesisCierre.add(")");
-        puntoComa.add(";");
-
-//        Creación de tokens
-        tokens.add(new Token("Punto y Coma", puntoComa));
-        tokens.add(new Token("Coma", coma));
-        tokens.add(new Token("Parentesis apertura", parentesisApertura));
-        tokens.add(new Token("Parentesis cierre", parentesisCierre));
-
-        identificador = new Token("Identificador", "[a-zA-Z]+(_[a-zA-Z]+)*");
-        longitud = new Token("Longitud", "(1|2|3|4|5|6|7|8|9)|((1|2|3|4|5|6|7|8|9)(0|1|2|3|4|5|6|7|8|9))|((1|2)((0|1|2|3|4|5))((0|1|2|3|4|5)))");
-        palabrasReservadas = new Token("Palabras Reservadas", simbolosPalabrasReservadas);
-        tiposDato = new Token("Tipos de Dato", simbolosTiposDato);
-
-        tokens.add(longitud);
-        tokens.add(identificador);
-        tokens.add(palabrasReservadas);
-        tokens.add(tiposDato);
     }
 
     @FXML
@@ -189,7 +58,7 @@ public class MainViewController {
             Parent root = fxmlLoader2.load();
             ResumenController controlador = fxmlLoader2.getController();
 
-            controlador.initialize(tokensEncontrados,simbolosNoValidos);
+            controlador.initialize(analizadorLexico.getTokensEncontrados(),analizadorLexico.getSimbolosNoValidos());
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
