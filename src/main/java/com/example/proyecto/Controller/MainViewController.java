@@ -10,6 +10,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import java_cup.runtime.Symbol;
@@ -35,6 +37,9 @@ public class MainViewController {
     @FXML
     private Label message;
 
+    @FXML
+    private Rectangle cmd;
+
     private AnalizadorLexico analizadorLexico;
 
     void iniciarLexer(String ruta) {
@@ -52,20 +57,24 @@ public class MainViewController {
 //        String ruta3 = path.toAbsolutePath().toString().replace("\\", "/") + "/src/main/java/com/example/proyecto/Model/LexerCup.flex";
 //        iniciarLexer(ruta3);
 //        java_cup.Main.main(rutaS);
+        cmd.setVisible(false);
         analizadorLexico = new AnalizadorLexico();
     }
 
     void evaluarSintaxis() {
+        cmd.setVisible(true);
         String ST = TA_consultas.getText();
         Sintax s = new Sintax(new LexerCup(new StringReader(ST)));
 
         try {
             s.parse();
-            System.out.println("Sintaxis Correcta");
+            message.setTextFill(Color.web("white"));
+            message.setText("> Sintaxis Correcta");
         } catch (Exception e) {
             Symbol sym = s.getS();
 //            System.out.println("Error de sintaxis en la linea: "+(sym.right)+ "indice: "+(sym.left)+" Texto: "+sym.value);
-            System.out.println("Error de sintaxis en la linea: " + (sym.right + 1));
+            message.setTextFill(Color.web("EE6023"));
+            message.setText("> Error de sintaxis en la linea: " + (sym.right+1));
         }
     }
 
@@ -118,6 +127,8 @@ public class MainViewController {
 
     @FXML
     void executeOnMouseClicked(MouseEvent event) throws IOException {
+        message.setText("");
+        cmd.setVisible(false);
         analizadorLexico.busqueda(TA_consultas, ver_btn);
         analizadorLexico.showMensaje(mensaje, ver_btn);
         if (analizadorLexico.getSimbolosNoValidos().isEmpty())
