@@ -3,8 +3,8 @@ import static com.example.proyecto.Model.Tokens.*;
 %%
 %class Lexer
 %type Tokens
+%ignorecase
 L=[a-zA-Z]+
-D=[0-9]+
 espacio=[ \t\r\n]+
 %{
     public String lexeme;

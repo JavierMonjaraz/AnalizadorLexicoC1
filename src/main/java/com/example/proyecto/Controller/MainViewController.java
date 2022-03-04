@@ -17,8 +17,7 @@ import javafx.stage.Stage;
 import java_cup.runtime.Symbol;
 
 import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.util.ArrayList;
 
 public class MainViewController {
 
@@ -41,6 +40,12 @@ public class MainViewController {
     private Rectangle cmd;
 
     private AnalizadorLexico analizadorLexico;
+
+    private Token simbolosNoValidos;
+
+    private ArrayList<Token> tokensEncontrados;
+
+    private
 
     void iniciarLexer(String ruta) {
         File archivo = new File(ruta);
@@ -74,67 +79,102 @@ public class MainViewController {
             Symbol sym = s.getS();
 //            System.out.println("Error de sintaxis en la linea: "+(sym.right)+ "indice: "+(sym.left)+" Texto: "+sym.value);
             message.setTextFill(Color.web("EE6023"));
-            message.setText("> Error de sintaxis en la linea: " + (sym.right+1));
+            message.setText("> Error de sintaxis en la linea: " + (sym.right + 1));
         }
     }
 
-    void lexema() {
-//        File archivo = new File("archivo.txt");
-//        PrintWriter escribir;
-//        try {
-//            escribir = new PrintWriter(archivo);
-//            escribir.print(TA_consultas.getText());
-//            escribir.close();
-//        } catch (FileNotFoundException e) {
-//            e.printStackTrace();
-//        }
-//
-//        try {
-//            Reader lector = new BufferedReader(new FileReader("archivo.txt"));
-//            Lexer lexer = new Lexer(lector);
-//            String resultado = "";
-//            while (true) {
-//                Tokens tokens = lexer.yylex();
-//                if (tokens == null) {
-//                    resultado += "FIN";
-////                    txtResultado.setText(resultado);
-//                    System.out.println(resultado);
-//                    return;
-//                }
-//                switch (tokens) {
-//                    case ERROR:
-//                        resultado += lexer.lexeme+"Simbolo no definido\n";
-//                        break;
-//                    case Identificador:
-//                    case Longitud:
-//                    case ParentesisApertura:
-//                    case ParentesisCierre:
-//                    case COMA:
-//                    case DataType:
-//                    case PCOMA:
-//                    case Reservadas:
-//                        resultado += lexer.lexeme + ": Es un " + tokens + "\n";
-//                        break;
-//                    default:
-//                        resultado += "Token: " + tokens + "\n";
-//                        break;
-//                }
-//            }
-//        } finally {
-//
-//        }
+    void lexema() throws IOException {
+        Token pcoma = new Token("Punto y Coma", new ArrayList<>());
+        Token coma = new Token("Coma", new ArrayList<>());
+        Token pa = new Token("Parentesis apertura", new ArrayList<>());
+        Token pc = new Token("Parentesis cierre", new ArrayList<>());
+        Token identificador = new Token("Identificador", new ArrayList<>());
+        Token longitud = new Token("Longitud", new ArrayList<>());
+        Token palabrasReservadas = new Token("Palabras Reservadas", new ArrayList<>());
+        Token tiposDato = new Token("Tipos de Dato", new ArrayList<>());
+
+        simbolosNoValidos = new Token("No válidos", new ArrayList<>());
+
+        Lexer lexer = new Lexer(new StringReader(TA_consultas.getText()));
+        String resultado = "";
+        while (true) {
+            Tokens tokens = lexer.yylex();
+            if (tokens == null) {
+                tokensEncontrados = new ArrayList<>();
+                tokensEncontrados.add(pa);
+                tokensEncontrados.add(pc);
+                tokensEncontrados.add(pcoma);
+                tokensEncontrados.add(identificador);
+                tokensEncontrados.add(longitud);
+                tokensEncontrados.add(palabrasReservadas);
+                tokensEncontrados.add(tiposDato);
+                tokensEncontrados.add(coma);
+                showMensaje();
+                return;
+            }
+            switch (tokens) {
+                case ERROR:
+                    simbolosNoValidos.addSimbolo(lexer.lexeme);
+                    break;
+                case Identificador:
+                    identificador.addSimbolo(lexer.lexeme);
+                    break;
+                case Longitud:
+                    longitud.addSimbolo(lexer.lexeme);
+                    break;
+                case ParentesisApertura:
+                    pa.addSimbolo(lexer.lexeme);
+                    break;
+                case ParentesisCierre:
+                    pc.addSimbolo(lexer.lexeme);
+                    break;
+                case COMA:
+                    coma.addSimbolo(lexer.lexeme);
+                    break;
+                case DataType:
+                    tiposDato.addSimbolo(lexer.lexeme);
+                    break;
+                case PCOMA:
+                    pcoma.addSimbolo(lexer.lexeme);
+                    break;
+                case Reservadas:
+                    palabrasReservadas.addSimbolo(lexer.lexeme);
+                    break;
+                default:
+                    break;
+            }
+        }
+
     }
 
     @FXML
     void executeOnMouseClicked(MouseEvent event) throws IOException {
         message.setText("");
         cmd.setVisible(false);
-        analizadorLexico.busqueda(TA_consultas, ver_btn);
-        analizadorLexico.showMensaje(mensaje, ver_btn);
-        if (analizadorLexico.getSimbolosNoValidos().isEmpty())
-            evaluarSintaxis();
+        if(!TA_consultas.getText().equals("")) {
+            lexema();
+            if (simbolosNoValidos.getSimbolos().isEmpty())
+                evaluarSintaxis();
+        }
     }
 
+    public void showMensaje() {
+        mensaje.setText("");
+
+        if (!simbolosNoValidos.getSimbolos().isEmpty()) {
+            mensaje.setTextFill(Color.web("FF8B00"));
+            int cantidadSimbolos = simbolosNoValidos.getSimbolos().size();
+            if (cantidadSimbolos == 1) {
+                mensaje.setText("Se ha encontrado " + cantidadSimbolos + " Símbolo no válido");
+            } else {
+                mensaje.setText("Se han encontrado " + cantidadSimbolos + " símbolos no válidos");
+            }
+        } else {
+            mensaje.setTextFill(Color.web("white"));
+            mensaje.setText("Todos los símbolos introducidos han sido aceptados");
+        }
+        ver_btn.setVisible(true);
+    }
 
     @FXML
     void salirOnMouseClicked(MouseEvent event) {
@@ -149,7 +189,7 @@ public class MainViewController {
             Parent root = fxmlLoader2.load();
             ResumenController controlador = fxmlLoader2.getController();
 
-            controlador.initialize(analizadorLexico.getTokensEncontrados(), analizadorLexico.getSimbolosNoValidos());
+            controlador.initialize(tokensEncontrados, simbolosNoValidos.getSimbolos());
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
