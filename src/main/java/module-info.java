@@ -3,6 +3,8 @@ module com.example.proyecto {
     requires javafx.fxml;
 
     requires org.controlsfx.controls;
+//    requires JFlex;
+    requires java.cup;
 
     opens assets;
     opens com.example.proyecto to javafx.fxml;

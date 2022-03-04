@@ -1,7 +1,6 @@
 package com.example.proyecto.Controller;
 
-import com.example.proyecto.Model.AnalizadorLexico;
-import com.example.proyecto.Model.Token;
+import com.example.proyecto.Model.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -11,12 +10,13 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import java_cup.runtime.Symbol;
 
-import java.io.IOException;
-import java.util.*;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class MainViewController {
 
@@ -33,15 +33,92 @@ public class MainViewController {
     private Button ver_btn;
 
     private AnalizadorLexico analizadorLexico;
-    @FXML
-    public void initialize() {
-        analizadorLexico = new AnalizadorLexico();
+
+    void iniciarLexer(String ruta) {
+        File archivo = new File(ruta);
+//        JFlex.Main.generate(archivo);
     }
 
     @FXML
-    void executeOnMouseClicked(MouseEvent event) {
-        analizadorLexico.busqueda(TA_consultas,ver_btn);
-        analizadorLexico.showMensaje(mensaje,ver_btn);
+    public void initialize() throws Exception {
+        // Genera las clases de LexerCup y JCup
+//        Path path = Paths.get("");
+//        String ruta = path.toAbsolutePath().toString().replace("\\", "/") + "/src/main/java/com/example/proyecto/Model/Lexer.flex";
+//        String rutaCup = path.toAbsolutePath().toString().replace("\\", "/") + "/src/main/java/com/example/proyecto/Model/Sintax.cup";
+//        String[] rutaS = {"-parser","Sintax",rutaCup};
+//        String ruta3 = path.toAbsolutePath().toString().replace("\\", "/") + "/src/main/java/com/example/proyecto/Model/LexerCup.flex";
+//        iniciarLexer(ruta3);
+//        java_cup.Main.main(rutaS);
+        analizadorLexico = new AnalizadorLexico();
+    }
+
+    void evaluarSintaxis() {
+        String ST = TA_consultas.getText();
+        Sintax s = new Sintax(new LexerCup(new StringReader(ST)));
+
+        try {
+            s.parse();
+            System.out.println("Sintaxis Correcta");
+        } catch (Exception e) {
+            Symbol sym = s.getS();
+//            System.out.println("Error de sintaxis en la linea: "+(sym.right)+ "indice: "+(sym.left)+" Texto: "+sym.value);
+            System.out.println("Error de sintaxis en la linea: " + (sym.right + 1));
+        }
+    }
+
+    void lexema() {
+//        File archivo = new File("archivo.txt");
+//        PrintWriter escribir;
+//        try {
+//            escribir = new PrintWriter(archivo);
+//            escribir.print(TA_consultas.getText());
+//            escribir.close();
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//
+//        try {
+//            Reader lector = new BufferedReader(new FileReader("archivo.txt"));
+//            Lexer lexer = new Lexer(lector);
+//            String resultado = "";
+//            while (true) {
+//                Tokens tokens = lexer.yylex();
+//                if (tokens == null) {
+//                    resultado += "FIN";
+////                    txtResultado.setText(resultado);
+//                    System.out.println(resultado);
+//                    return;
+//                }
+//                switch (tokens) {
+//                    case ERROR:
+//                        resultado += lexer.lexeme+"Simbolo no definido\n";
+//                        break;
+//                    case Identificador:
+//                    case Longitud:
+//                    case ParentesisApertura:
+//                    case ParentesisCierre:
+//                    case COMA:
+//                    case DataType:
+//                    case PCOMA:
+//                    case Reservadas:
+//                        resultado += lexer.lexeme + ": Es un " + tokens + "\n";
+//                        break;
+//                    default:
+//                        resultado += "Token: " + tokens + "\n";
+//                        break;
+//                }
+//            }
+//        } finally {
+//
+//        }
+    }
+
+    @FXML
+    void executeOnMouseClicked(MouseEvent event) throws IOException {
+        analizadorLexico.busqueda(TA_consultas, ver_btn);
+        analizadorLexico.showMensaje(mensaje, ver_btn);
+        if (analizadorLexico.getSimbolosNoValidos().isEmpty())
+            evaluarSintaxis();
     }
 
 
@@ -58,7 +135,7 @@ public class MainViewController {
             Parent root = fxmlLoader2.load();
             ResumenController controlador = fxmlLoader2.getController();
 
-            controlador.initialize(analizadorLexico.getTokensEncontrados(),analizadorLexico.getSimbolosNoValidos());
+            controlador.initialize(analizadorLexico.getTokensEncontrados(), analizadorLexico.getSimbolosNoValidos());
             Scene scene = new Scene(root);
             Stage stage = new Stage();
             stage.setScene(scene);
@@ -67,8 +144,8 @@ public class MainViewController {
             stage.setTitle("Detalles");
             stage.setResizable(false);
             stage.showAndWait();
-            ver_btn.setVisible(false);
-            mensaje.setText("");
+//            ver_btn.setVisible(false);
+//            mensaje.setText("");
         } catch (IOException ex) {
             System.out.println("IO Exception: " + ex.getMessage());
         }
