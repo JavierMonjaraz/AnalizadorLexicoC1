@@ -45,9 +45,7 @@ public class MainViewController {
 
     private ArrayList<Token> tokensEncontrados;
 
-    private
-
-    void iniciarLexer(String ruta) {
+    private void iniciarLexer(String ruta) {
         File archivo = new File(ruta);
 //        JFlex.Main.generate(archivo);
     }
@@ -77,7 +75,6 @@ public class MainViewController {
             message.setText("> Sintaxis Correcta");
         } catch (Exception e) {
             Symbol sym = s.getS();
-//            System.out.println("Error de sintaxis en la linea: "+(sym.right)+ "indice: "+(sym.left)+" Texto: "+sym.value);
             message.setTextFill(Color.web("EE6023"));
             message.setText("> Error de sintaxis en la linea: " + (sym.right + 1));
         }
@@ -96,7 +93,7 @@ public class MainViewController {
         simbolosNoValidos = new Token("No válidos", new ArrayList<>());
 
         Lexer lexer = new Lexer(new StringReader(TA_consultas.getText()));
-        String resultado = "";
+
         while (true) {
             Tokens tokens = lexer.yylex();
             if (tokens == null) {
@@ -151,7 +148,7 @@ public class MainViewController {
     void executeOnMouseClicked(MouseEvent event) throws IOException {
         message.setText("");
         cmd.setVisible(false);
-        if(!TA_consultas.getText().equals("")) {
+        if (!TA_consultas.getText().equals("")) {
             lexema();
             if (simbolosNoValidos.getSimbolos().isEmpty())
                 evaluarSintaxis();
@@ -198,8 +195,6 @@ public class MainViewController {
             stage.setTitle("Detalles");
             stage.setResizable(false);
             stage.showAndWait();
-//            ver_btn.setVisible(false);
-//            mensaje.setText("");
         } catch (IOException ex) {
             System.out.println("IO Exception: " + ex.getMessage());
         }
