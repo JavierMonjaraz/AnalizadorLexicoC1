@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="550.0" prefWidth="700.0" style="-fx-background-color: #112349;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto.Controller.MainViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="575.0" prefWidth="700.0" style="-fx-background-color: #112349;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.proyecto.Controller.MainViewController">
    <children>
-      <AnchorPane layoutX="-7.0" layoutY="-8.0" prefHeight="559.0" prefWidth="157.0" style="-fx-background-color: #2c2ab8;">
+      <AnchorPane layoutX="-7.0" layoutY="-8.0" prefHeight="585.0" prefWidth="163.0" style="-fx-background-color: #2c2ab8;">
          <children>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#82a0bc" height="100.0" layoutX="7.0" layoutY="61.0" opacity="0.84" stroke="#2c2ab8" strokeType="INSIDE" width="156.0" />
             <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="42.0" layoutY="81.0" pickOnBounds="true" preserveRatio="true">
@@ -20,7 +20,7 @@
                   <Image url="@../../../../assets/mysql.png" />
                </image>
             </ImageView>
-            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="42.0" layoutY="475.0" onMouseClicked="#salirOnMouseClicked" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="60.0" fitWidth="60.0" layoutX="42.0" layoutY="490.0" onMouseClicked="#salirOnMouseClicked" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../../../../assets/cancel.png" />
                </image>
@@ -53,5 +53,11 @@
             <Font name="Segoe UI" size="12.0" />
          </font>
       </Button>
+      <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4d4949" height="66.0" layoutX="202.0" layoutY="492.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" width="334.0" />
+      <Label fx:id="message" layoutX="221.0" layoutY="509.0" prefHeight="32.0" prefWidth="295.0" textFill="WHITE" wrapText="true">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
    </children>
 </AnchorPane>

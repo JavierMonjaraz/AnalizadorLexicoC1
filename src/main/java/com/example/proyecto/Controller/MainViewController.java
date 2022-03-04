@@ -32,6 +32,9 @@ public class MainViewController {
     @FXML
     private Button ver_btn;
 
+    @FXML
+    private Label message;
+
     private AnalizadorLexico analizadorLexico;
 
     void iniciarLexer(String ruta) {
