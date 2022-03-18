@@ -1,5 +1,7 @@
 package com.example.proyecto.Controller;
 
+import com.example.proyecto.DbDriver.Connector;
+import com.example.proyecto.DbDriver.DaoCreate;
 import com.example.proyecto.Model.*;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -72,10 +74,13 @@ public class MainViewController {
         Sintax s = new Sintax(new LexerCup(new StringReader(ST)));
 
         try {
-//            s.parse();
-            s.debug_parse();
+            s.parse();
+//            s.debug_parse();
             message.setTextFill(Color.web("white"));
             message.setText("> Sintaxis Correcta");
+            DaoCreate ejecucion = new DaoCreate();
+            boolean resultado = ejecucion.ExecuteQuery(ST);
+            System.out.println(resultado);
         } catch (Exception e) {
             Symbol sym = s.getS();
             message.setTextFill(Color.web("EE6023"));
