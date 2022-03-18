@@ -18,7 +18,7 @@ public class Main extends Application {
     public void start(Stage stage) throws IOException {
         this.primaryStage=stage;
         try {
-            scene = new Scene(loadFXML("MainView"));
+            scene = new Scene(loadFXML("MainView"));    
             primaryStage.setScene(scene);
             primaryStage.setResizable(false);
             primaryStage.getIcons().add(new Image("assets/mysqllogo.jpg"));
