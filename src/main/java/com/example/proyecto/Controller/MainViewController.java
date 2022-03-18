@@ -17,6 +17,8 @@ import javafx.stage.Stage;
 import java_cup.runtime.Symbol;
 
 import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class MainViewController {
@@ -70,7 +72,8 @@ public class MainViewController {
         Sintax s = new Sintax(new LexerCup(new StringReader(ST)));
 
         try {
-            s.parse();
+//            s.parse();
+            s.debug_parse();
             message.setTextFill(Color.web("white"));
             message.setText("> Sintaxis Correcta");
         } catch (Exception e) {
@@ -150,8 +153,9 @@ public class MainViewController {
         cmd.setVisible(false);
         if (!TA_consultas.getText().equals("")) {
             lexema();
-            if (simbolosNoValidos.getSimbolos().isEmpty())
+            if (simbolosNoValidos.getSimbolos().isEmpty()) {
                 evaluarSintaxis();
+            }
         }
     }
 

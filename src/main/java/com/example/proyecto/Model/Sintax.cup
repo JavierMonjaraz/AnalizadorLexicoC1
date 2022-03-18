@@ -17,14 +17,17 @@ parser code
 terminal Int, Decimal, Double, Float, Mediumint, Real, Smallint, Tinyint, Char,
         Varchar, Text, Longtext, Mediumtext, Tinytext, Nchar, Nvarchar, Date,
         Datetime, Year, Time,  Timestamp, Create, Database, Table, Not, Nulo,
-        autoi, primary, key, pa, pc, coma, pcoma, identificador, Longitud, ERROR;
-nonterminal QUERY, CDB, CTB, N, NTB, RNTB, ATRIBUTO, RATRIBUTOS, ATRIBUTOS, AUTOI, PK, TIPODATO, LONGITUD;
+        autoi, primary, key, pa, pc, coma, pcoma, identificador, Longitud, Use,ERROR;
+nonterminal QUERY, CDB, CTB, N, NTB, RNTB, ATRIBUTO, RATRIBUTOS, ATRIBUTOS, AUTOI, PK,
+            TIPODATO, LONGITUD, UDB;
 
 start with QUERY;
 
-QUERY ::= CDB NTB
+QUERY ::= CDB UDB NTB
 ;
 CDB ::= Create Database identificador pcoma
+;
+UDB ::= Use identificador pcoma
 ;
 NTB ::= CTB pcoma RNTB
 ;
