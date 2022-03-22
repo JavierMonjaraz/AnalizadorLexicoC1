@@ -17,7 +17,8 @@ auto_increment |
 null |
 not |
 primary |
-key {lexeme=yytext(); return Reservadas;}
+key |
+use {lexeme=yytext(); return Reservadas;}
 {espacio} {/*Ignore*/}
 "//".* {/*Ignore*/}
 "(" {lexeme=yytext(); return ParentesisApertura;}

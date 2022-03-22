@@ -49,6 +49,9 @@ public class MainViewController {
 
     private ArrayList<Token> tokensEncontrados;
 
+    private Token tokensOrden;
+
+    private Token identificador;
     private void iniciarLexer(String ruta) {
         File archivo = new File(ruta);
 //        JFlex.Main.generate(archivo);
@@ -62,7 +65,7 @@ public class MainViewController {
 //        String rutaCup = path.toAbsolutePath().toString().replace("\\", "/") + "/src/main/java/com/example/proyecto/Model/Sintax.cup";
 //        String[] rutaS = {"-parser","Sintax",rutaCup};
 //        String ruta3 = path.toAbsolutePath().toString().replace("\\", "/") + "/src/main/java/com/example/proyecto/Model/LexerCup.flex";
-//        iniciarLexer(ruta3);
+//        iniciarLexer(ruta);
 //        java_cup.Main.main(rutaS);
         cmd.setVisible(false);
         analizadorLexico = new AnalizadorLexico();
@@ -78,9 +81,52 @@ public class MainViewController {
 //            s.debug_parse();
             message.setTextFill(Color.web("white"));
             message.setText("> Sintaxis Correcta");
-            DaoCreate ejecucion = new DaoCreate();
-            boolean resultado = ejecucion.ExecuteQuery(ST);
-            System.out.println(resultado);
+//            DaoCreate ejecucion = new DaoCreate();
+//            boolean resultado = ejecucion.ExecuteQuery(ST);
+//            System.out.println(resultado);
+
+            boolean isCreate = false;
+            boolean atributos = false;
+
+            System.out.println(identificador.getSimbolos().get(0));
+            System.out.println(identificador.getSimbolos().get(1));
+
+            for(int i=0; i<tokensOrden.getSimbolos().size(); i++){
+                if(tokensOrden.getSimbolos().get(i).equalsIgnoreCase("TABLE")){
+                    isCreate = true;
+                    atributos = true;
+
+                }
+                if(isCreate){
+                    System.out.println(tokensOrden.getSimbolos().get(i+1));
+//                    if(atributos){
+//                        String simboloActual = tokensOrden.getSimbolos().get(i);
+//
+//                        int indice = 0;
+//                        while (indice<identificador.getSimbolos().size()){
+//                            String simboloIdentificador = identificador.getSimbolos().get(indice);
+//                            if(simboloIdentificador.equals(simboloActual)){
+//                                System.out.println(simboloIdentificador);
+//                                indice=identificador.getSimbolos().size();
+//                            }
+//                            indice++;
+//                        }
+//                    }
+
+                    isCreate = false;
+                }
+            }
+
+//            for (String simbolo:tokensOrden.getSimbolos()) {
+////                System.out.println(simbolo);
+//                if(simbolo.equalsIgnoreCase("TABLE")){
+//                    isCreate = true;
+//                }
+//                if(isCreate){
+//                    System.out.println(simbolo);
+////                    isCreate = false;
+//                }
+//            }
         } catch (Exception e) {
             Symbol sym = s.getS();
             message.setTextFill(Color.web("EE6023"));
@@ -93,11 +139,11 @@ public class MainViewController {
         Token coma = new Token("Coma", new ArrayList<>());
         Token pa = new Token("Parentesis apertura", new ArrayList<>());
         Token pc = new Token("Parentesis cierre", new ArrayList<>());
-        Token identificador = new Token("Identificador", new ArrayList<>());
+        identificador = new Token("Identificador", new ArrayList<>());
         Token longitud = new Token("Longitud", new ArrayList<>());
         Token palabrasReservadas = new Token("Palabras Reservadas", new ArrayList<>());
         Token tiposDato = new Token("Tipos de Dato", new ArrayList<>());
-
+        tokensOrden = new Token("Lista tokens", new ArrayList<>());
         simbolosNoValidos = new Token("No válidos", new ArrayList<>());
 
         Lexer lexer = new Lexer(new StringReader(TA_consultas.getText()));
@@ -123,27 +169,35 @@ public class MainViewController {
                     break;
                 case Identificador:
                     identificador.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 case Longitud:
                     longitud.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 case ParentesisApertura:
                     pa.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 case ParentesisCierre:
                     pc.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 case COMA:
                     coma.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 case DataType:
                     tiposDato.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 case PCOMA:
                     pcoma.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 case Reservadas:
                     palabrasReservadas.addSimbolo(lexer.lexeme);
+                    tokensOrden.addSimbolo(lexer.lexeme);
                     break;
                 default:
                     break;
