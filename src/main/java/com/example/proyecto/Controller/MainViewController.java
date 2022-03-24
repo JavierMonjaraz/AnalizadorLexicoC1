@@ -40,10 +40,10 @@ public class MainViewController {
     private Button ver_btn;
 
     @FXML
-    private Label message;
+    private TextArea message;
 
-    @FXML
-    private Rectangle cmd;
+//    @FXML
+//    private Rectangle cmd;
 
     private AnalizadorLexico analizadorLexico;
 
@@ -70,25 +70,25 @@ public class MainViewController {
 //        String ruta3 = path.toAbsolutePath().toString().replace("\\", "/") + "/src/main/java/com/example/proyecto/Model/LexerCup.flex";
 //        iniciarLexer(ruta);
 //        java_cup.Main.main(rutaS);
-        cmd.setVisible(false);
+//        cmd.setVisible(false);
         analizadorLexico = new AnalizadorLexico();
     }
 
     void evaluarSintaxis() {
-        cmd.setVisible(true);
+//        cmd.setVisible(true);
         String ST = TA_consultas.getText();
         Sintax s = new Sintax(new LexerCup(new StringReader(ST)));
 
         try {
             s.parse();
 //            s.debug_parse();
-            message.setTextFill(Color.web("white"));
+//            message.setTextFill(Color.web("white"));
             message.setText("> Sintaxis Correcta");
             verificarSemantica();
 
         } catch (Exception e) {
             Symbol sym = s.getS();
-            message.setTextFill(Color.web("EE6023"));
+//            message.setTextFill(Color.web("EE6023"));
             message.setText("> Error de sintaxis en la linea: " + (sym.right + 1));
         }
     }
@@ -108,7 +108,7 @@ public class MainViewController {
             errors.addAll(analizadorSemantico.getErrores());
             if (this.errors.size()>0){
                 StringBuilder m = new StringBuilder(message.getText());
-                m = new StringBuilder(message.getText() + " \n>Errors : \n");
+                m = new StringBuilder(message.getText() + " \n>Errores semánticos : \n");
                 for (String error : errors) {
                     String r = "*" + error + "\n";
                     m.append(r);
@@ -194,7 +194,7 @@ public class MainViewController {
     @FXML
     void executeOnMouseClicked(MouseEvent event) throws IOException {
         message.setText("");
-        cmd.setVisible(false);
+//        cmd.setVisible(false);
         if (!TA_consultas.getText().equals("")) {
             lexema();
             if (simbolosNoValidos.getSimbolos().isEmpty()) {
