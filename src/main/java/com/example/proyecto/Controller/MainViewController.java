@@ -54,7 +54,7 @@ public class MainViewController {
     private Token tokensOrden;
 
     private Token identificador;
-
+    private ArrayList<String> errors;
     private void iniciarLexer(String ruta) {
         File archivo = new File(ruta);
 //        JFlex.Main.generate(archivo);
@@ -104,8 +104,16 @@ public class MainViewController {
             ejecutarsql(TA_consultas.getText());
             message.setText("> Ejecución correcta");
         } else {
-            for (String error : analizadorSemantico.getErrores()) {
-                System.out.println(error);
+            errors = new ArrayList<>();
+            errors.addAll(analizadorSemantico.getErrores());
+            if (this.errors.size()>0){
+                StringBuilder m = new StringBuilder(message.getText());
+                m = new StringBuilder(message.getText() + " \n>Errors : \n");
+                for (String error : errors) {
+                    String r = "*" + error + "\n";
+                    m.append(r);
+                }
+                message.setText(m.toString());
             }
         }
 
