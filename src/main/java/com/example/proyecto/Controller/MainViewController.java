@@ -22,6 +22,8 @@ import java.io.*;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 public class MainViewController {
 
@@ -52,6 +54,7 @@ public class MainViewController {
     private Token tokensOrden;
 
     private Token identificador;
+
     private void iniciarLexer(String ruta) {
         File archivo = new File(ruta);
 //        JFlex.Main.generate(archivo);
@@ -81,57 +84,31 @@ public class MainViewController {
 //            s.debug_parse();
             message.setTextFill(Color.web("white"));
             message.setText("> Sintaxis Correcta");
-//            DaoCreate ejecucion = new DaoCreate();
-//            boolean resultado = ejecucion.ExecuteQuery(ST);
-//            System.out.println(resultado);
+            verificarSemantica();
 
-            boolean isCreate = false;
-            boolean atributos = false;
-
-            System.out.println(identificador.getSimbolos().get(0));
-            System.out.println(identificador.getSimbolos().get(1));
-
-            for(int i=0; i<tokensOrden.getSimbolos().size(); i++){
-                if(tokensOrden.getSimbolos().get(i).equalsIgnoreCase("TABLE")){
-                    isCreate = true;
-                    atributos = true;
-
-                }
-                if(isCreate){
-                    System.out.println(tokensOrden.getSimbolos().get(i+1));
-//                    if(atributos){
-//                        String simboloActual = tokensOrden.getSimbolos().get(i);
-//
-//                        int indice = 0;
-//                        while (indice<identificador.getSimbolos().size()){
-//                            String simboloIdentificador = identificador.getSimbolos().get(indice);
-//                            if(simboloIdentificador.equals(simboloActual)){
-//                                System.out.println(simboloIdentificador);
-//                                indice=identificador.getSimbolos().size();
-//                            }
-//                            indice++;
-//                        }
-//                    }
-
-                    isCreate = false;
-                }
-            }
-
-//            for (String simbolo:tokensOrden.getSimbolos()) {
-////                System.out.println(simbolo);
-//                if(simbolo.equalsIgnoreCase("TABLE")){
-//                    isCreate = true;
-//                }
-//                if(isCreate){
-//                    System.out.println(simbolo);
-////                    isCreate = false;
-//                }
-//            }
         } catch (Exception e) {
             Symbol sym = s.getS();
             message.setTextFill(Color.web("EE6023"));
             message.setText("> Error de sintaxis en la linea: " + (sym.right + 1));
         }
+    }
+
+    void ejecutarsql(String consulta) {
+        DaoCreate ejecucion = new DaoCreate();
+        boolean resultado = ejecucion.ExecuteQuery(consulta);
+    }
+
+    void verificarSemantica() {
+        AnalizadorSemantico analizadorSemantico = new AnalizadorSemantico(tokensOrden, identificador);
+        if (analizadorSemantico.semanticaValida()) {
+            ejecutarsql(TA_consultas.getText());
+            message.setText("> Ejecución correcta");
+        } else {
+            for (String error : analizadorSemantico.getErrores()) {
+                System.out.println(error);
+            }
+        }
+
     }
 
     void lexema() throws IOException {
