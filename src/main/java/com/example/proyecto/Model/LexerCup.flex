@@ -47,6 +47,7 @@ espacio=[ \t\r\n]+
 
 ( create ) {return new Symbol(sym.Create, yychar, yyline, yytext());}
 ( database ) {return new Symbol(sym.Database, yychar, yyline, yytext());}
+( use ) {return new Symbol(sym.Use, yychar, yyline, yytext());}
 ( table ) {return new Symbol(sym.Table, yychar, yyline, yytext());}
 ( not ) {return new Symbol(sym.Not, yychar, yyline, yytext());}
 ( null ) {return new Symbol(sym.Nulo, yychar, yyline, yytext());}

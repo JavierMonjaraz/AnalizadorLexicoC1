@@ -5,6 +5,7 @@ module com.example.proyecto {
     requires org.controlsfx.controls;
 //    requires JFlex;
     requires java.cup;
+    requires java.sql;
 
     opens assets;
     opens com.example.proyecto to javafx.fxml;
